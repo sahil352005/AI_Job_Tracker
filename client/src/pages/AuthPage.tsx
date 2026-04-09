@@ -24,49 +24,49 @@ export default function AuthPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%)' }}
-    >
-      {/* Decorative circles */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-10 bg-white" />
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full opacity-10 bg-white" />
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 75%, #4facfe 100%)' }}>
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full opacity-20 blur-3xl" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }} />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-20 blur-3xl" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #4facfe 100%)' }} />
       </div>
 
       <div className="relative w-full max-w-sm">
-        {/* Brand */}
-        <div className="text-center mb-7">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm mb-4 border border-white/20">
-            <span className="text-2xl">🎯</span>
+        {/* Brand with enhanced styling */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl backdrop-blur-xl bg-white/10 mb-4 border border-white/30 shadow-lg">
+            <span className="text-4xl">🎯</span>
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">JobTrack AI</h1>
-          <p className="text-white/60 text-sm mt-1.5 font-medium">Track smarter. Land faster.</p>
+          <h1 className="text-4xl font-black text-white tracking-tight" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>JobTrack AI</h1>
+          <p className="text-white/80 text-base mt-2 font-medium">Smart job tracking for ambitious engineers</p>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-          {/* Tab switcher */}
-          <div className="flex border-b border-slate-100">
+        {/* Enhanced card with backdrop blur */}
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/20">
+          {/* Tab switcher with animation */}
+          <div className="flex border-b border-slate-100/50 bg-slate-50/50">
             {(['Sign In', 'Register'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => { setIsLogin(tab === 'Sign In'); setError(''); }}
-                className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${
+                className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative ${
                   (isLogin ? 'Sign In' : 'Register') === tab
-                    ? 'text-violet-600 border-b-2 border-violet-600 bg-violet-50/50'
-                    : 'text-slate-400 hover:text-slate-600'
+                    ? 'text-violet-600'
+                    : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
                 {tab}
+                {(isLogin ? 'Sign In' : 'Register') === tab && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 to-violet-600" />
+                )}
               </button>
             ))}
           </div>
 
-          <div className="p-6">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="p-7">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-widest mb-2">
                   Email address
                 </label>
                 <input
@@ -75,11 +75,11 @@ export default function AuthPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-3 focus:ring-violet-100 transition-all bg-slate-50 focus:bg-white placeholder:text-slate-300 font-medium"
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all bg-slate-50/50 focus:bg-white placeholder:text-slate-400 font-medium"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-widest mb-2">
                   Password
                 </label>
                 <input
@@ -88,22 +88,22 @@ export default function AuthPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-3 focus:ring-violet-100 transition-all bg-slate-50 focus:bg-white placeholder:text-slate-300 font-medium"
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all bg-slate-50/50 focus:bg-white placeholder:text-slate-400 font-medium"
                 />
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
-                  <span className="text-red-400 text-sm">⚠</span>
-                  <p className="text-red-600 text-sm font-medium">{error}</p>
+                <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <span className="text-red-500 text-lg leading-none mt-0.5">⚠️</span>
+                  <p className="text-red-700 text-sm font-medium">{error}</p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60 mt-1"
-                style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)', boxShadow: '0 4px 14px rgba(109,40,217,0.4)' }}
+                className="w-full py-3.5 rounded-xl text-sm font-bold text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-2 hover:shadow-lg active:scale-95"
+                style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)', boxShadow: '0 4px 15px rgba(109,40,217,0.35)' }}
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -111,16 +111,16 @@ export default function AuthPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
-                    Please wait...
+                    Authenticating...
                   </span>
-                ) : isLogin ? 'Sign In →' : 'Create Account →'}
+                ) : isLogin ? 'Sign In' : 'Create Account'}
               </button>
             </form>
           </div>
         </div>
 
-        <p className="text-center text-white/40 text-xs mt-5">
-          Powered by OpenAI · Groq · Gemini
+        <p className="text-center text-white/70 text-xs mt-6 font-medium">
+          Powered by <span className="font-semibold">OpenAI</span> • <span className="font-semibold">Groq</span> • <span className="font-semibold">Gemini</span>
         </p>
       </div>
     </div>

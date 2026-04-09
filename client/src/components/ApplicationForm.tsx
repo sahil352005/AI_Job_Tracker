@@ -70,57 +70,59 @@ export default function ApplicationForm({ initial, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(2px)' }}>
-      <div className="bg-white rounded-2xl w-full max-w-xl max-h-[92vh] flex flex-col" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm" style={{ background: 'rgba(15,23,42,0.5)' }}>
+      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-slate-100" style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0">
+        <div className="flex items-center justify-between px-7 py-5 border-b border-slate-100 shrink-0 bg-slate-50/30">
           <div>
-            <h2 className="text-base font-bold text-slate-800">{initial ? 'Edit Application' : 'New Application'}</h2>
-            <p className="text-xs text-slate-400 mt-0.5">{initial ? 'Update the details below' : 'Paste a JD to auto-fill with AI'}</p>
+            <h2 className="text-lg font-bold text-slate-900">{initial ? '✏️ Edit Application' : '✨ New Application'}</h2>
+            <p className="text-sm text-slate-500 mt-1 font-medium">{initial ? 'Update the details below' : 'Add and track a new job application'}</p>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition text-base font-bold"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 transition-all text-xl font-bold"
           >
             ✕
           </button>
         </div>
 
         {/* Scrollable body */}
-        <div className="overflow-y-auto flex-1 px-6 py-5 flex flex-col gap-5">
+        <div className="overflow-y-auto flex-1 px-7 py-6 flex flex-col gap-6">
 
           {/* AI Parser */}
           {!initial && (
-            <div className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-base">✨</span>
-                <p className="text-sm font-bold text-violet-800">AI Job Description Parser</p>
+            <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-5 shadow-sm">
+              <div className="flex items-center gap-2.5 mb-3.5">
+                <span className="text-lg">✨</span>
+                <p className="text-sm font-bold text-violet-900">AI Job Description Parser</p>
               </div>
               <textarea
                 rows={3}
-                placeholder="Paste the full job description here and click Parse..."
+                placeholder="Paste the full job description and auto-fill fields with AI..."
                 value={jd}
                 onChange={(e) => setJd(e.target.value)}
-                className="w-full border border-violet-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all bg-white resize-none placeholder:text-slate-300 font-medium"
+                className="w-full border border-violet-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all bg-white resize-none placeholder:text-slate-400 font-medium"
               />
               {parseError && (
-                <p className="text-red-500 text-xs mt-2 font-medium">⚠ {parseError}</p>
+                <p className="text-red-600 text-xs mt-3 font-semibold flex items-center gap-1.5">
+                  <span>⚠️</span> {parseError}
+                </p>
               )}
               <button
                 type="button"
                 onClick={handleParse}
                 disabled={parsing || !jd.trim()}
-                className="mt-3 flex items-center gap-2 text-sm font-bold text-white px-4 py-2 rounded-lg transition-all disabled:opacity-50 hover:opacity-90"
+                className="mt-4 flex items-center gap-2 text-sm font-bold text-white px-5 py-2.5 rounded-lg transition-all disabled:opacity-50 hover:shadow-md hover:-translate-y-0.5 active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)' }}
               >
                 {parsing ? (
                   <>
-                    <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
-                    Parsing...
+                    Analyzing...
                   </>
                 ) : '✨ Parse with AI'}
               </button>
@@ -128,8 +130,9 @@ export default function ApplicationForm({ initial, onClose }: Props) {
           )}
 
           {/* Form fields */}
-          <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="flex flex-col gap-5">
+            {/* Required fields */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
                 <label className={LABEL}>Company *</label>
                 <input className={INPUT} placeholder="e.g. Google" value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} />
@@ -140,62 +143,65 @@ export default function ApplicationForm({ initial, onClose }: Props) {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Location & Seniority */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
-                <label className={LABEL}>Location</label>
-                <input className={INPUT} placeholder="e.g. New York" value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} />
+                <label className={LABEL}>📍 Location</label>
+                <input className={INPUT} placeholder="e.g. New York, NY" value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} />
               </div>
               <div>
-                <label className={LABEL}>Seniority</label>
-                <input className={INPUT} placeholder="e.g. Mid-level" value={form.seniority} onChange={(e) => setForm((f) => ({ ...f, seniority: e.target.value }))} />
+                <label className={LABEL}>💼 Seniority Level</label>
+                <input className={INPUT} placeholder="e.g. Mid-level, Senior" value={form.seniority} onChange={(e) => setForm((f) => ({ ...f, seniority: e.target.value }))} />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Salary & URL */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
-                <label className={LABEL}>Salary Range</label>
+                <label className={LABEL}>💰 Salary Range</label>
                 <input className={INPUT} placeholder="e.g. $120k–$150k" value={form.salaryRange} onChange={(e) => setForm((f) => ({ ...f, salaryRange: e.target.value }))} />
               </div>
               <div>
-                <label className={LABEL}>Job URL</label>
+                <label className={LABEL}>🔗 Job Posting URL</label>
                 <input className={INPUT} placeholder="https://..." value={form.jdLink} onChange={(e) => setForm((f) => ({ ...f, jdLink: e.target.value }))} />
               </div>
             </div>
 
+            {/* Status */}
             <div>
-              <label className={LABEL}>Status</label>
+              <label className={LABEL}>📊 Current Status</label>
               <select className={INPUT} value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as AppStatus }))}>
                 {STATUSES.map((s) => <option key={s}>{s}</option>)}
               </select>
             </div>
 
             {form.skills.length > 0 && (
-              <div>
-                <label className={LABEL}>Required Skills</label>
-                <div className="flex flex-wrap gap-1.5">
+              <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-100">
+                <label className={LABEL}>⚡ Required Skills</label>
+                <div className="flex flex-wrap gap-2">
                   {form.skills.map((s) => (
-                    <span key={s} className="bg-violet-50 text-violet-700 text-xs px-2.5 py-1 rounded-full border border-violet-100 font-semibold">{s}</span>
+                    <span key={s} className="bg-violet-100 text-violet-800 text-xs px-3 py-1.5 rounded-full border border-violet-200 font-semibold">{s}</span>
                   ))}
                 </div>
               </div>
             )}
 
             {form.niceToHaveSkills.length > 0 && (
-              <div>
-                <label className={LABEL}>Nice to Have</label>
-                <div className="flex flex-wrap gap-1.5">
+              <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-100">
+                <label className={LABEL}>🎯 Nice to Have</label>
+                <div className="flex flex-wrap gap-2">
                   {form.niceToHaveSkills.map((s) => (
-                    <span key={s} className="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full font-semibold">{s}</span>
+                    <span key={s} className="bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-full font-semibold">{s}</span>
                   ))}
                 </div>
               </div>
             )}
 
             <div>
-              <label className={LABEL}>Notes</label>
+              <label className={LABEL}>📝 Notes</label>
               <textarea
                 rows={2}
-                placeholder="Any notes about this application..."
+                placeholder="Add any personal notes about this opportunity..."
                 value={form.notes}
                 onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
                 className={`${INPUT} resize-none`}
@@ -203,21 +209,21 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             </div>
 
             {form.resumeSuggestions.length > 0 && (
-              <div className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-4">
-                <p className="text-xs font-bold text-violet-800 mb-3 flex items-center gap-1.5">
-                  <span>✨</span> AI Resume Suggestions
+              <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-5 shadow-sm">
+                <p className="text-sm font-bold text-violet-900 mb-4 flex items-center gap-2">
+                  <span>✨</span> AI Resume Optimization
                 </p>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2.5">
                   {form.resumeSuggestions.map((s, i) => (
-                    <div key={i} className="flex items-start gap-2.5 bg-white rounded-lg p-3 border border-violet-100">
-                      <span className="text-violet-300 text-xs font-bold shrink-0 mt-0.5 w-4">{i + 1}.</span>
+                    <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-3.5 border border-violet-100">
+                      <span className="text-violet-400 text-xs font-bold shrink-0 mt-0.5 w-5">{i + 1}.</span>
                       <p className="text-xs text-slate-700 flex-1 leading-relaxed">{s}</p>
                       <button
                         type="button"
                         onClick={() => copy(s, i)}
-                        className={`text-xs font-bold shrink-0 px-2.5 py-1 rounded-lg transition ${copied === i ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700 hover:bg-violet-200'}`}
+                        className={`text-xs font-bold shrink-0 px-3 py-1.5 rounded-lg transition-all ${copied === i ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700 hover:bg-violet-200'}`}
                       >
-                        {copied === i ? '✓ Done' : 'Copy'}
+                        {copied === i ? '✓' : 'Copy'}
                       </button>
                     </div>
                   ))}
@@ -226,29 +232,37 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             )}
 
             {mutation.isError && (
-              <p className="text-red-600 text-xs bg-red-50 border border-red-100 rounded-xl px-4 py-2.5 font-medium">
-                Failed to save. Please try again.
-              </p>
+              <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                <p className="text-red-700 text-xs font-semibold">Failed to save application. Please try again.</p>
+              </div>
             )}
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 px-6 py-4 border-t border-slate-100 shrink-0 bg-slate-50/50 rounded-b-2xl">
+        <div className="flex gap-3 px-7 py-4 border-t border-slate-100 shrink-0 bg-slate-50/50 rounded-b-2xl">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 border border-slate-200 text-slate-600 rounded-xl py-2.5 text-sm font-bold hover:bg-slate-100 transition"
+            className="flex-1 border border-slate-200 text-slate-700 rounded-lg py-2.5 text-sm font-bold hover:bg-slate-100 transition-all"
           >
             Cancel
           </button>
           <button
             onClick={() => mutation.mutate(form)}
             disabled={mutation.isPending || !form.company || !form.role}
-            className="flex-1 text-white rounded-xl py-2.5 text-sm font-bold transition disabled:opacity-50 hover:opacity-90"
+            className="flex-1 text-white rounded-lg py-2.5 text-sm font-bold transition-all disabled:opacity-50 hover:shadow-lg hover:-translate-y-0.5 active:scale-95"
             style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)' }}
           >
-            {mutation.isPending ? 'Saving...' : initial ? 'Save Changes' : 'Save Application'}
+            {mutation.isPending ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                Saving...
+              </span>
+            ) : initial ? 'Save Changes' : 'Save Application'}
           </button>
         </div>
       </div>
