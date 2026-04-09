@@ -37,7 +37,7 @@ export default function ApplicationDetail({ app, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm" style={{ background: 'rgba(15,23,42,0.5)' }}>
-      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] flex flex-col border border-slate-100" style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] flex flex-col border border-slate-100" style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
 
         {/* Header */}
         <div className="px-7 py-5 border-b border-slate-100 shrink-0 bg-slate-50/30">

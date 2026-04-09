@@ -71,7 +71,7 @@ export default function ApplicationForm({ initial, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm" style={{ background: 'rgba(15,23,42,0.5)' }}>
-      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-slate-100" style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+      <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[95vh] flex flex-col border border-slate-100" style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
 
         {/* Header */}
         <div className="flex items-center justify-between px-7 py-5 border-b border-slate-100 shrink-0 bg-slate-50/30">
@@ -130,9 +130,9 @@ export default function ApplicationForm({ initial, onClose }: Props) {
           )}
 
           {/* Form fields */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-7">
             {/* Required fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label className={LABEL}>Company *</label>
                 <input className={INPUT} placeholder="e.g. Google" value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} />
@@ -144,7 +144,7 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             </div>
 
             {/* Location & Seniority */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label className={LABEL}>Location</label>
                 <input className={INPUT} placeholder="e.g. New York, NY" value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} />
@@ -156,7 +156,7 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             </div>
 
             {/* Salary & URL */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label className={LABEL}>Salary Range</label>
                 <input className={INPUT} placeholder="e.g. $120k–$150k" value={form.salaryRange} onChange={(e) => setForm((f) => ({ ...f, salaryRange: e.target.value }))} />
