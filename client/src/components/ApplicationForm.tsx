@@ -17,8 +17,8 @@ const empty = {
   resumeSuggestions: [] as string[],
 };
 
-const INPUT = 'w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all bg-slate-50 focus:bg-white placeholder:text-slate-300 font-medium text-slate-800';
-const LABEL = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5';
+const INPUT = 'w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100 transition-all bg-slate-50 focus:bg-white placeholder:text-slate-400 font-medium text-slate-800';
+const LABEL = 'block text-xs font-bold text-slate-700 uppercase tracking-widest mb-2';
 
 export default function ApplicationForm({ initial, onClose }: Props) {
   const qc = useQueryClient();
@@ -130,9 +130,9 @@ export default function ApplicationForm({ initial, onClose }: Props) {
           )}
 
           {/* Form fields */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-6">
             {/* Required fields */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label className={LABEL}>Company *</label>
                 <input className={INPUT} placeholder="e.g. Google" value={form.company} onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))} />
@@ -144,40 +144,40 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             </div>
 
             {/* Location & Seniority */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className={LABEL}>📍 Location</label>
+                <label className={LABEL}>Location</label>
                 <input className={INPUT} placeholder="e.g. New York, NY" value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} />
               </div>
               <div>
-                <label className={LABEL}>💼 Seniority Level</label>
+                <label className={LABEL}>Seniority Level</label>
                 <input className={INPUT} placeholder="e.g. Mid-level, Senior" value={form.seniority} onChange={(e) => setForm((f) => ({ ...f, seniority: e.target.value }))} />
               </div>
             </div>
 
             {/* Salary & URL */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className={LABEL}>💰 Salary Range</label>
+                <label className={LABEL}>Salary Range</label>
                 <input className={INPUT} placeholder="e.g. $120k–$150k" value={form.salaryRange} onChange={(e) => setForm((f) => ({ ...f, salaryRange: e.target.value }))} />
               </div>
               <div>
-                <label className={LABEL}>🔗 Job Posting URL</label>
+                <label className={LABEL}>Job Posting URL</label>
                 <input className={INPUT} placeholder="https://..." value={form.jdLink} onChange={(e) => setForm((f) => ({ ...f, jdLink: e.target.value }))} />
               </div>
             </div>
 
             {/* Status */}
             <div>
-              <label className={LABEL}>📊 Current Status</label>
+              <label className={LABEL}>Current Status</label>
               <select className={INPUT} value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as AppStatus }))}>
                 {STATUSES.map((s) => <option key={s}>{s}</option>)}
               </select>
             </div>
 
             {form.skills.length > 0 && (
-              <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-100">
-                <label className={LABEL}>⚡ Required Skills</label>
+              <div className="bg-slate-50/50 rounded-lg p-4 border border-slate-100">
+                <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mb-3">Required Skills</p>
                 <div className="flex flex-wrap gap-2">
                   {form.skills.map((s) => (
                     <span key={s} className="bg-violet-100 text-violet-800 text-xs px-3 py-1.5 rounded-full border border-violet-200 font-semibold">{s}</span>
@@ -187,8 +187,8 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             )}
 
             {form.niceToHaveSkills.length > 0 && (
-              <div className="bg-slate-50/50 rounded-xl p-4 border border-slate-100">
-                <label className={LABEL}>🎯 Nice to Have</label>
+              <div className="bg-slate-50/50 rounded-lg p-4 border border-slate-100">
+                <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mb-3">Nice to Have</p>
                 <div className="flex flex-wrap gap-2">
                   {form.niceToHaveSkills.map((s) => (
                     <span key={s} className="bg-slate-200 text-slate-700 text-xs px-3 py-1.5 rounded-full font-semibold">{s}</span>
@@ -198,7 +198,7 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             )}
 
             <div>
-              <label className={LABEL}>📝 Notes</label>
+              <label className={LABEL}>Notes</label>
               <textarea
                 rows={2}
                 placeholder="Add any personal notes about this opportunity..."
@@ -209,19 +209,19 @@ export default function ApplicationForm({ initial, onClose }: Props) {
             </div>
 
             {form.resumeSuggestions.length > 0 && (
-              <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-5 shadow-sm">
-                <p className="text-sm font-bold text-violet-900 mb-4 flex items-center gap-2">
+              <div className="rounded-lg border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-4 shadow-sm">
+                <p className="text-xs font-bold text-violet-900 uppercase tracking-widest mb-3.5 flex items-center gap-2">
                   <span>✨</span> AI Resume Optimization
                 </p>
                 <div className="flex flex-col gap-2.5">
                   {form.resumeSuggestions.map((s, i) => (
-                    <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-3.5 border border-violet-100">
-                      <span className="text-violet-400 text-xs font-bold shrink-0 mt-0.5 w-5">{i + 1}.</span>
+                    <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-3 border border-violet-100">
+                      <span className="text-violet-400 text-xs font-bold shrink-0 mt-0.5 w-4">{i + 1}.</span>
                       <p className="text-xs text-slate-700 flex-1 leading-relaxed">{s}</p>
                       <button
                         type="button"
                         onClick={() => copy(s, i)}
-                        className={`text-xs font-bold shrink-0 px-3 py-1.5 rounded-lg transition-all ${copied === i ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700 hover:bg-violet-200'}`}
+                        className={`text-xs font-bold shrink-0 px-2.5 py-1 rounded text-nowrap transition-all ${copied === i ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700 hover:bg-violet-200'}`}
                       >
                         {copied === i ? '✓' : 'Copy'}
                       </button>
