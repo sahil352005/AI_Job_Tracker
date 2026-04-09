@@ -9,12 +9,12 @@ interface Props {
   onClose: () => void;
 }
 
-const STATUS_STYLE: Record<AppStatus, string> = {
-  Applied: 'bg-blue-100 text-blue-700',
-  'Phone Screen': 'bg-amber-100 text-amber-700',
-  Interview: 'bg-orange-100 text-orange-700',
-  Offer: 'bg-emerald-100 text-emerald-700',
-  Rejected: 'bg-red-100 text-red-600',
+const STATUS_STYLE: Record<AppStatus, { bg: string; color: string }> = {
+  Applied:        { bg: '#dbeafe', color: '#1d4ed8' },
+  'Phone Screen': { bg: '#fef3c7', color: '#b45309' },
+  Interview:      { bg: '#ffedd5', color: '#c2410c' },
+  Offer:          { bg: '#dcfce7', color: '#15803d' },
+  Rejected:       { bg: '#fee2e2', color: '#b91c1c' },
 };
 
 export default function ApplicationDetail({ app, onClose }: Props) {
@@ -35,66 +35,64 @@ export default function ApplicationDetail({ app, onClose }: Props) {
 
   if (editing) return <ApplicationForm initial={app} onClose={() => { setEditing(false); onClose(); }} />;
 
+  const st = STATUS_STYLE[app.status];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(2px)' }}>
-      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[92vh] flex flex-col" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(4px)' }}>
+      <div style={{ background: '#fff', borderRadius: '20px', width: '100%', maxWidth: '540px', maxHeight: '92vh', display: 'flex', flexDirection: 'column', boxShadow: '0 25px 60px rgba(0,0,0,0.25)' }}>
 
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-100 shrink-0">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h2 className="text-xl font-bold text-slate-800 truncate">{app.company}</h2>
-              <p className="text-sm text-slate-500 mt-0.5 font-medium">{app.role}</p>
+        <div style={{ padding: '24px 24px 20px', borderBottom: '1px solid #f1f5f9', flexShrink: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
+            <div style={{ minWidth: 0 }}>
+              <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#1e293b', lineHeight: 1.2 }}>{app.company}</h2>
+              <p style={{ fontSize: '15px', color: '#64748b', fontWeight: 500, marginTop: '4px' }}>{app.role}</p>
             </div>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition shrink-0 text-base font-bold"
-            >
-              ✕
-            </button>
+            <button onClick={onClose} style={{ width: '32px', height: '32px', borderRadius: '8px', fontSize: '16px', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#f1f5f9'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+            >✕</button>
           </div>
-          <div className="flex flex-wrap gap-2 mt-3">
-            <span className={`text-xs font-bold px-3 py-1 rounded-full ${STATUS_STYLE[app.status]}`}>{app.status}</span>
-            {app.seniority && <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600">{app.seniority}</span>}
-            {app.location && <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600">📍 {app.location}</span>}
-            {app.salaryRange && <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700">💰 {app.salaryRange}</span>}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '14px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, padding: '5px 14px', borderRadius: '99px', background: st.bg, color: st.color }}>{app.status}</span>
+            {app.seniority && <span style={{ fontSize: '13px', fontWeight: 600, padding: '5px 14px', borderRadius: '99px', background: '#f1f5f9', color: '#475569' }}>{app.seniority}</span>}
+            {app.location && <span style={{ fontSize: '13px', fontWeight: 600, padding: '5px 14px', borderRadius: '99px', background: '#f1f5f9', color: '#475569' }}>📍 {app.location}</span>}
+            {app.salaryRange && <span style={{ fontSize: '13px', fontWeight: 600, padding: '5px 14px', borderRadius: '99px', background: '#f0fdf4', color: '#15803d' }}>💰 {app.salaryRange}</span>}
           </div>
         </div>
 
         {/* Body */}
-        <div className="overflow-y-auto flex-1 px-6 py-5 flex flex-col gap-5">
+        <div style={{ overflowY: 'auto', flex: 1, padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
-          {/* Info cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Date Applied</p>
-              <p className="text-sm font-bold text-slate-700">
+          {/* Info grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '14px 16px', border: '1px solid #f1f5f9' }}>
+              <p style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Date Applied</p>
+              <p style={{ fontSize: '15px', fontWeight: 700, color: '#334155' }}>
                 {new Date(app.dateApplied).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
             </div>
-            {app.jdLink ? (
-              <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Job Posting</p>
-                <a href={app.jdLink} target="_blank" rel="noreferrer" className="text-sm font-bold text-violet-600 hover:text-violet-800 hover:underline transition-colors">
-                  View Posting ↗
-                </a>
+            {app.jdLink && (
+              <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '14px 16px', border: '1px solid #f1f5f9' }}>
+                <p style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Job Posting</p>
+                <a href={app.jdLink} target="_blank" rel="noreferrer" style={{ fontSize: '15px', fontWeight: 700, color: '#7c3aed' }}>View ↗</a>
               </div>
-            ) : <div />}
+            )}
           </div>
 
           {app.notes && (
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Notes</p>
-              <p className="text-sm text-slate-700 leading-relaxed">{app.notes}</p>
+            <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '16px', border: '1px solid #f1f5f9' }}>
+              <p style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Notes</p>
+              <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6 }}>{app.notes}</p>
             </div>
           )}
 
           {app.skills && app.skills.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2.5">Required Skills</p>
-              <div className="flex flex-wrap gap-1.5">
+              <p style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Required Skills</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {app.skills.map((s) => (
-                  <span key={s} className="bg-violet-50 text-violet-700 text-xs px-2.5 py-1 rounded-full border border-violet-100 font-semibold">{s}</span>
+                  <span key={s} style={{ background: '#f5f3ff', color: '#7c3aed', fontSize: '13px', fontWeight: 600, padding: '5px 12px', borderRadius: '99px', border: '1px solid #ede9fe' }}>{s}</span>
                 ))}
               </div>
             </div>
@@ -102,31 +100,27 @@ export default function ApplicationDetail({ app, onClose }: Props) {
 
           {app.niceToHaveSkills && app.niceToHaveSkills.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2.5">Nice to Have</p>
-              <div className="flex flex-wrap gap-1.5">
+              <p style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Nice to Have</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {app.niceToHaveSkills.map((s) => (
-                  <span key={s} className="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full font-semibold">{s}</span>
+                  <span key={s} style={{ background: '#f8fafc', color: '#64748b', fontSize: '13px', fontWeight: 600, padding: '5px 12px', borderRadius: '99px', border: '1px solid #e2e8f0' }}>{s}</span>
                 ))}
               </div>
             </div>
           )}
 
           {app.resumeSuggestions && app.resumeSuggestions.length > 0 && (
-            <div className="rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50 p-4">
-              <p className="text-xs font-bold text-violet-800 mb-3 flex items-center gap-1.5">
-                <span>✨</span> AI Resume Suggestions
-              </p>
-              <div className="flex flex-col gap-2">
+            <div style={{ background: 'linear-gradient(135deg, #faf5ff, #f0f4ff)', border: '1.5px solid #ddd6fe', borderRadius: '14px', padding: '20px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: '#6d28d9', marginBottom: '14px' }}>✨ AI Resume Suggestions</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {app.resumeSuggestions.map((s, i) => (
-                  <div key={i} className="flex items-start gap-2.5 bg-white rounded-lg p-3 border border-violet-100">
-                    <span className="text-violet-300 text-xs font-bold shrink-0 mt-0.5 w-4">{i + 1}.</span>
-                    <p className="text-xs text-slate-700 flex-1 leading-relaxed">{s}</p>
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: '#fff', borderRadius: '10px', padding: '14px', border: '1px solid #ede9fe' }}>
+                    <span style={{ color: '#c4b5fd', fontSize: '13px', fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
+                    <p style={{ fontSize: '13px', color: '#334155', flex: 1, lineHeight: 1.6 }}>{s}</p>
                     <button
                       onClick={() => copy(s, i)}
-                      className={`text-xs font-bold shrink-0 px-2.5 py-1 rounded-lg transition ${copied === i ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700 hover:bg-violet-200'}`}
-                    >
-                      {copied === i ? '✓ Done' : 'Copy'}
-                    </button>
+                      style={{ fontSize: '12px', fontWeight: 700, padding: '5px 12px', borderRadius: '8px', border: 'none', background: copied === i ? '#d1fae5' : '#ede9fe', color: copied === i ? '#065f46' : '#7c3aed', cursor: 'pointer', flexShrink: 0 }}
+                    >{copied === i ? '✓ Done' : 'Copy'}</button>
                   </div>
                 ))}
               </div>
@@ -135,20 +129,16 @@ export default function ApplicationDetail({ app, onClose }: Props) {
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 px-6 py-4 border-t border-slate-100 shrink-0 bg-slate-50/50 rounded-b-2xl">
+        <div style={{ display: 'flex', gap: '12px', padding: '20px 24px', borderTop: '1px solid #f1f5f9', flexShrink: 0, background: '#fafafa', borderRadius: '0 0 20px 20px' }}>
           <button
             onClick={() => setEditing(true)}
-            className="flex-1 border border-slate-200 text-slate-700 rounded-xl py-2.5 text-sm font-bold hover:bg-slate-100 transition"
-          >
-            ✏️ Edit
-          </button>
+            style={{ flex: 1, padding: '13px', fontSize: '14px', fontWeight: 700, color: '#475569', background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '10px', cursor: 'pointer' }}
+          >✏️ Edit</button>
           <button
             onClick={() => { if (confirm('Delete this application?')) deleteMutation.mutate(); }}
             disabled={deleteMutation.isPending}
-            className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl py-2.5 text-sm font-bold transition disabled:opacity-50 border border-red-100"
-          >
-            {deleteMutation.isPending ? 'Deleting...' : '🗑️ Delete'}
-          </button>
+            style={{ flex: 1, padding: '13px', fontSize: '14px', fontWeight: 700, color: '#dc2626', background: '#fef2f2', border: '1.5px solid #fecaca', borderRadius: '10px', cursor: 'pointer', opacity: deleteMutation.isPending ? 0.6 : 1 }}
+          >{deleteMutation.isPending ? 'Deleting...' : '🗑️ Delete'}</button>
         </div>
       </div>
     </div>

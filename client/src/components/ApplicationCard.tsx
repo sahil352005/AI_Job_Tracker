@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Application, AppStatus } from '../types';
 
 interface Props {
@@ -5,61 +6,78 @@ interface Props {
   onClick: () => void;
 }
 
-const STATUS_DOT: Record<AppStatus, string> = {
-  Applied: 'bg-blue-500',
-  'Phone Screen': 'bg-amber-500',
-  Interview: 'bg-orange-500',
-  Offer: 'bg-emerald-500',
-  Rejected: 'bg-red-500',
+const STATUS_COLOR: Record<AppStatus, string> = {
+  Applied: '#3b82f6',
+  'Phone Screen': '#f59e0b',
+  Interview: '#f97316',
+  Offer: '#10b981',
+  Rejected: '#ef4444',
 };
 
 export default function ApplicationCard({ app, onClick }: Props) {
+  const [hovered, setHovered] = useState(false);
+
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl p-4 cursor-pointer border border-slate-100 group transition-all duration-150 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-100 hover:-translate-y-px"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: '#fff',
+        borderRadius: '14px',
+        padding: '20px',
+        cursor: 'pointer',
+        border: hovered ? '1.5px solid #c4b5fd' : '1.5px solid #f1f5f9',
+        boxShadow: hovered ? '0 8px 24px rgba(124,58,237,0.12)' : '0 1px 4px rgba(0,0,0,0.06)',
+        transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
+        transition: 'all 0.2s ease',
+      }}
     >
-      <div className="flex items-start justify-between gap-3 min-w-0">
-        <p className="font-semibold text-slate-800 text-sm leading-snug truncate group-hover:text-violet-700 transition-colors min-w-0">
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '6px' }}>
+        <p style={{ fontSize: '16px', fontWeight: 700, color: hovered ? '#7c3aed' : '#1e293b', lineHeight: 1.3, transition: 'color 0.2s' }}>
           {app.company}
         </p>
-        <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${STATUS_DOT[app.status]}`} />
+        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: STATUS_COLOR[app.status], flexShrink: 0, marginTop: '4px' }} />
       </div>
 
-      <p className="text-slate-500 text-xs mt-0.5 font-medium truncate">{app.role}</p>
+      {/* Role */}
+      <p style={{ fontSize: '14px', fontWeight: 500, color: '#64748b', marginBottom: '14px' }}>{app.role}</p>
 
-      <div className="flex flex-wrap gap-2 mt-2 text-slate-400 text-xs">
+      {/* Meta */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px' }}>
         {app.location && (
-          <span className="flex items-center gap-1 min-w-0">
-            <span>📍</span>
-            <span className="truncate">{app.location}</span>
+          <span style={{ fontSize: '13px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            📍 {app.location}{app.seniority ? ` · ${app.seniority}` : ''}
           </span>
         )}
-        {app.seniority && (
-          <span className="text-slate-300">·</span>
-        )}
-        {app.seniority && (
-          <span className="min-w-0 truncate">{app.seniority}</span>
+        {app.salaryRange && (
+          <span style={{ fontSize: '13px', color: '#10b981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            💰 {app.salaryRange}
+          </span>
         )}
       </div>
-      {app.salaryRange && (
-        <p className="text-emerald-600 text-xs font-semibold mt-2">💰 {app.salaryRange}</p>
+
+      {/* Skills */}
+      {app.skills && app.skills.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
+          {app.skills.slice(0, 3).map((s) => (
+            <span key={s} style={{
+              background: '#f5f3ff', color: '#7c3aed', fontSize: '12px', fontWeight: 600,
+              padding: '4px 10px', borderRadius: '99px', border: '1px solid #ede9fe',
+            }}>{s}</span>
+          ))}
+          {app.skills.length > 3 && (
+            <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, padding: '4px 6px' }}>+{app.skills.length - 3}</span>
+          )}
+        </div>
       )}
 
-      <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-50">
-        <span className="text-slate-400 text-xs">
-          {new Date(app.dateApplied).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+      {/* Footer */}
+      <div style={{ borderTop: '1px solid #f8fafc', paddingTop: '12px' }}>
+        <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 500 }}>
+          Applied {new Date(app.dateApplied).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
         </span>
-        {app.skills && app.skills.length > 0 && (
-          <div className="flex items-center gap-1">
-            {app.skills.slice(0, 2).map((s) => (
-              <span key={s} className="bg-violet-50 text-violet-600 text-xs px-2 py-0.5 rounded-full font-medium">{s}</span>
-            ))}
-            {app.skills.length > 2 && (
-              <span className="text-slate-400 text-xs font-medium">+{app.skills.length - 2}</span>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

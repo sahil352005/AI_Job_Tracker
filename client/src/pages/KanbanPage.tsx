@@ -10,12 +10,12 @@ import ApplicationDetail from '../components/ApplicationDetail';
 
 const COLUMNS: AppStatus[] = ['Applied', 'Phone Screen', 'Interview', 'Offer', 'Rejected'];
 
-const COL: Record<AppStatus, { dot: string; bg: string; border: string; count: string; glow: string }> = {
-  Applied:        { dot: 'bg-blue-500',    bg: 'bg-blue-50/70',    border: 'border-blue-100',    count: 'bg-blue-100 text-blue-700',     glow: 'ring-blue-200' },
-  'Phone Screen': { dot: 'bg-amber-500',   bg: 'bg-amber-50/70',   border: 'border-amber-100',   count: 'bg-amber-100 text-amber-700',   glow: 'ring-amber-200' },
-  Interview:      { dot: 'bg-orange-500',  bg: 'bg-orange-50/70',  border: 'border-orange-100',  count: 'bg-orange-100 text-orange-700', glow: 'ring-orange-200' },
-  Offer:          { dot: 'bg-emerald-500', bg: 'bg-emerald-50/70', border: 'border-emerald-100', count: 'bg-emerald-100 text-emerald-700',glow: 'ring-emerald-200' },
-  Rejected:       { dot: 'bg-red-400',     bg: 'bg-red-50/70',     border: 'border-red-100',     count: 'bg-red-100 text-red-600',       glow: 'ring-red-200' },
+const COL_STYLE: Record<AppStatus, { dot: string; bg: string; border: string; badgeBg: string; badgeColor: string }> = {
+  Applied:        { dot: '#3b82f6', bg: '#eff6ff', border: '#bfdbfe', badgeBg: '#dbeafe', badgeColor: '#1d4ed8' },
+  'Phone Screen': { dot: '#f59e0b', bg: '#fffbeb', border: '#fde68a', badgeBg: '#fef3c7', badgeColor: '#b45309' },
+  Interview:      { dot: '#f97316', bg: '#fff7ed', border: '#fed7aa', badgeBg: '#ffedd5', badgeColor: '#c2410c' },
+  Offer:          { dot: '#10b981', bg: '#f0fdf4', border: '#bbf7d0', badgeBg: '#dcfce7', badgeColor: '#15803d' },
+  Rejected:       { dot: '#ef4444', bg: '#fef2f2', border: '#fecaca', badgeBg: '#fee2e2', badgeColor: '#b91c1c' },
 };
 
 export default function KanbanPage() {
@@ -47,32 +47,61 @@ export default function KanbanPage() {
   const initial = email?.[0]?.toUpperCase() ?? '?';
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-100">
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#f1f5f9' }}>
+
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 h-[58px] flex items-center justify-between shrink-0 shadow-sm">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)' }}>
-            🎯
+      <header style={{
+        background: '#fff', borderBottom: '1px solid #e2e8f0',
+        padding: '0 32px', height: '64px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.06)', flexShrink: 0,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{
+            width: '38px', height: '38px', borderRadius: '10px',
+            background: 'linear-gradient(135deg, #6d28d9, #7c3aed)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px',
+          }}>🎯</div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+              <span style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b' }}>JobTrack</span>
+              <span style={{ fontSize: '18px', fontWeight: 800, color: '#7c3aed' }}>AI</span>
+            </div>
+            <p style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 500 }}>Track your job applications</p>
           </div>
-          <span className="font-bold text-slate-800 text-[15px] tracking-tight">JobTrack</span>
-          <span className="font-bold text-[15px] tracking-tight" style={{ color: '#7c3aed' }}>AI</span>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 mr-1">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: 'linear-gradient(135deg, #6d28d9, #a78bfa)' }}>
-              {initial}
-            </div>
-            <span className="text-sm text-slate-500 max-w-[160px] truncate">{email}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 14px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+            <div style={{
+              width: '32px', height: '32px', borderRadius: '50%',
+              background: 'linear-gradient(135deg, #6d28d9, #a78bfa)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '13px', fontWeight: 700, color: '#fff',
+            }}>{initial}</div>
+            <span style={{ fontSize: '14px', color: '#475569', fontWeight: 500 }}>{email}</span>
           </div>
+
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-1.5 text-sm font-semibold text-white px-4 py-2 rounded-lg transition-all hover:opacity-90 active:scale-95"
-            style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)', boxShadow: '0 2px 8px rgba(109,40,217,0.35)' }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '8px',
+              padding: '10px 20px', fontSize: '14px', fontWeight: 700, color: '#fff',
+              background: 'linear-gradient(135deg, #6d28d9, #7c3aed)',
+              borderRadius: '10px', border: 'none',
+              boxShadow: '0 4px 12px rgba(109,40,217,0.35)',
+              transition: 'all 0.2s',
+            }}
           >
-            <span className="text-base leading-none">+</span> Add Application
+            + Add Application
           </button>
-          <button onClick={logout} className="text-xs text-slate-400 hover:text-red-500 transition font-semibold px-2 py-1 rounded-lg hover:bg-red-50">
+
+          <button
+            onClick={logout}
+            style={{ fontSize: '14px', color: '#94a3b8', fontWeight: 600, padding: '8px 12px', borderRadius: '8px', transition: 'all 0.2s' }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = '#fef2f2'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#94a3b8'; e.currentTarget.style.background = 'transparent'; }}
+          >
             Logout
           </button>
         </div>
@@ -80,16 +109,21 @@ export default function KanbanPage() {
 
       {/* Stats bar */}
       {applications.length > 0 && (
-        <div className="bg-white border-b border-slate-200 px-6 h-10 flex items-center gap-4 overflow-x-auto shrink-0">
-          <span className="text-xs font-semibold text-slate-400 shrink-0">
-            {applications.length} total
+        <div style={{
+          background: '#fff', borderBottom: '1px solid #e2e8f0',
+          padding: '0 32px', height: '48px',
+          display: 'flex', alignItems: 'center', gap: '24px',
+          overflowX: 'auto', flexShrink: 0,
+        }}>
+          <span style={{ fontSize: '13px', fontWeight: 700, color: '#475569', whiteSpace: 'nowrap' }}>
+            {applications.length} Total
           </span>
-          <div className="w-px h-4 bg-slate-100 shrink-0" />
+          <div style={{ width: '1px', height: '20px', background: '#e2e8f0', flexShrink: 0 }} />
           {COLUMNS.map((col) => (
-            <div key={col} className="flex items-center gap-1.5 shrink-0">
-              <span className={`w-1.5 h-1.5 rounded-full ${COL[col].dot}`} />
-              <span className="text-xs text-slate-500 font-medium">{col}</span>
-              <span className={`text-xs font-bold px-1.5 py-0.5 rounded-md ${COL[col].count}`}>
+            <div key={col} style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: COL_STYLE[col].dot, flexShrink: 0 }} />
+              <span style={{ fontSize: '13px', color: '#64748b', fontWeight: 500 }}>{col}</span>
+              <span style={{ fontSize: '12px', fontWeight: 700, padding: '2px 8px', borderRadius: '6px', background: COL_STYLE[col].badgeBg, color: COL_STYLE[col].badgeColor }}>
                 {byStatus(col).length}
               </span>
             </div>
@@ -98,94 +132,97 @@ export default function KanbanPage() {
       )}
 
       {/* Board */}
-      <main className="flex-1 p-6 overflow-x-auto">
-        <div className="mx-auto max-w-[1600px]">
-          {isLoading && (
-            <div className="flex flex-col items-center justify-center h-64 gap-3">
-              <svg className="animate-spin h-7 w-7 text-violet-400" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-              </svg>
-              <p className="text-slate-400 text-sm font-medium">Loading your board...</p>
-            </div>
-          )}
+      <main style={{ flex: 1, padding: '28px 32px', overflowX: 'auto' }}>
+        {isLoading && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ width: '40px', height: '40px', border: '3px solid #e2e8f0', borderTopColor: '#7c3aed', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+            <p style={{ color: '#94a3b8', fontSize: '15px', fontWeight: 500 }}>Loading your board...</p>
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+          </div>
+        )}
 
-          {isError && (
-            <div className="flex items-center justify-center h-64">
-              <p className="text-red-500 text-sm font-medium">Failed to load. Please refresh.</p>
-            </div>
-          )}
+        {isError && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
+            <p style={{ color: '#ef4444', fontSize: '15px', fontWeight: 500 }}>Failed to load. Please refresh.</p>
+          </div>
+        )}
 
-          {!isLoading && !isError && applications.length === 0 && (
-            <div className="flex flex-col items-center justify-center h-64 gap-4">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl bg-violet-50">📋</div>
-              <div className="text-center">
-                <p className="text-slate-700 font-semibold">No applications yet</p>
-                <p className="text-slate-400 text-sm mt-1">Click "Add Application" to get started</p>
-              </div>
-            </div>
-          )}
+        {!isLoading && !isError && applications.length === 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', gap: '16px' }}>
+            <div style={{ fontSize: '48px' }}>📋</div>
+            <p style={{ fontSize: '18px', fontWeight: 700, color: '#334155' }}>No applications yet</p>
+            <p style={{ fontSize: '14px', color: '#94a3b8' }}>Click "Add Application" to get started</p>
+          </div>
+        )}
 
-          {!isLoading && !isError && (
-            <DragDropContext onDragEnd={onDragEnd}>
-              <div className="inline-flex gap-5 min-w-max pb-6">
-                {COLUMNS.map((col) => {
-                  const cards = byStatus(col);
-                  const s = COL[col];
-                  return (
-                    <div key={col} className="min-w-[22rem] max-w-[22rem] flex-shrink-0 flex flex-col gap-4">
-                      <div className="flex items-center justify-between px-1">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-2.5 h-2.5 rounded-full ${s.dot}`} />
-                          <span className="text-sm font-semibold text-slate-700">{col}</span>
-                        </div>
-                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${s.count}`}>
-                          {cards.length}
-                        </span>
+        {!isLoading && !isError && (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <div style={{ display: 'flex', gap: '20px', minWidth: 'max-content' }}>
+              {COLUMNS.map((col) => {
+                const cards = byStatus(col);
+                const s = COL_STYLE[col];
+                return (
+                  <div key={col} style={{ width: '300px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {/* Column header */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 4px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: s.dot }} />
+                        <span style={{ fontSize: '14px', fontWeight: 700, color: '#334155' }}>{col}</span>
                       </div>
-
-                      <Droppable droppableId={col}>
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={`rounded-[32px] border border-slate-200 p-4 flex flex-col gap-4 min-h-[240px] transition-all ${s.bg} ${snapshot.isDraggingOver ? `ring-2 ${s.glow}` : ''}`}
-                          >
-                            {cards.length === 0 && !snapshot.isDraggingOver && (
-                              <div className="flex flex-col items-center justify-center py-8 gap-1.5">
-                                <span className="text-slate-300 text-2xl">⊕</span>
-                                <p className="text-xs text-slate-400 font-medium">Drop here</p>
-                              </div>
-                            )}
-                            {cards.map((app, index) => (
-                              <Draggable key={app._id} draggableId={app._id} index={index}>
-                                {(provided, snapshot) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      ...provided.draggableProps.style,
-                                      opacity: snapshot.isDragging ? 0.9 : 1,
-                                      rotate: snapshot.isDragging ? '1.5deg' : '0deg',
-                                    }}
-                                  >
-                                    <ApplicationCard app={app} onClick={() => setSelected(app)} />
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
+                      <span style={{ fontSize: '12px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: s.badgeBg, color: s.badgeColor }}>
+                        {cards.length}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
-            </DragDropContext>
-          )}
-        </div>
+
+                    <Droppable droppableId={col}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          style={{
+                            background: snapshot.isDraggingOver ? '#ede9fe' : s.bg,
+                            border: `2px solid ${snapshot.isDraggingOver ? '#a78bfa' : s.border}`,
+                            borderRadius: '16px',
+                            padding: '12px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '10px',
+                            minHeight: '200px',
+                            transition: 'all 0.2s',
+                          }}
+                        >
+                          {cards.length === 0 && !snapshot.isDraggingOver && (
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '120px', color: '#cbd5e1', fontSize: '13px', fontWeight: 500 }}>
+                              Drop cards here
+                            </div>
+                          )}
+                          {cards.map((app, index) => (
+                            <Draggable key={app._id} draggableId={app._id} index={index}>
+                              {(provided, snapshot) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    ...provided.draggableProps.style,
+                                    opacity: snapshot.isDragging ? 0.85 : 1,
+                                  }}
+                                >
+                                  <ApplicationCard app={app} onClick={() => setSelected(app)} />
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                );
+              })}
+            </div>
+          </DragDropContext>
+        )}
       </main>
 
       {showForm && <ApplicationForm onClose={() => setShowForm(false)} />}

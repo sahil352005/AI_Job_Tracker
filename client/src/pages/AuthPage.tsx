@@ -24,50 +24,54 @@ export default function AuthPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%)' }}
-    >
-      {/* Decorative circles */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-10 bg-white" />
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full opacity-10 bg-white" />
-      </div>
-
-      <div className="relative w-full max-w-sm">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '24px',
+      background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%)',
+    }}>
+      <div style={{ width: '100%', maxWidth: '460px' }}>
         {/* Brand */}
-        <div className="text-center mb-7">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm mb-4 border border-white/20">
-            <span className="text-2xl">🎯</span>
-          </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">JobTrack AI</h1>
-          <p className="text-white/60 text-sm mt-1.5 font-medium">Track smarter. Land faster.</p>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: '64px', height: '64px', borderRadius: '20px',
+            background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
+            marginBottom: '16px', fontSize: '28px',
+          }}>🎯</div>
+          <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#fff', letterSpacing: '-0.5px' }}>JobTrack AI</h1>
+          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '15px', marginTop: '6px' }}>Smart job tracking for ambitious engineers</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-          {/* Tab switcher */}
-          <div className="flex border-b border-slate-100">
+        <div style={{
+          background: '#fff', borderRadius: '24px',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.25)', overflow: 'hidden',
+        }}>
+          {/* Tabs */}
+          <div style={{ display: 'flex', borderBottom: '1px solid #f1f5f9' }}>
             {(['Sign In', 'Register'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => { setIsLogin(tab === 'Sign In'); setError(''); }}
-                className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${
-                  (isLogin ? 'Sign In' : 'Register') === tab
-                    ? 'text-violet-600 border-b-2 border-violet-600 bg-violet-50/50'
-                    : 'text-slate-400 hover:text-slate-600'
-                }`}
-              >
-                {tab}
-              </button>
+                style={{
+                  flex: 1, padding: '18px 16px', fontSize: '15px', fontWeight: 600,
+                  color: (isLogin ? 'Sign In' : 'Register') === tab ? '#7c3aed' : '#94a3b8',
+                  borderBottom: (isLogin ? 'Sign In' : 'Register') === tab ? '2px solid #7c3aed' : '2px solid transparent',
+                  transition: 'all 0.2s', background: 'none',
+                }}
+              >{tab}</button>
             ))}
           </div>
 
-          <div className="p-6">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {/* Form */}
+          <div style={{ padding: '40px' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-                  Email address
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>
+                  Email Address
                 </label>
                 <input
                   type="email"
@@ -75,11 +79,18 @@ export default function AuthPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-3 focus:ring-violet-100 transition-all bg-slate-50 focus:bg-white placeholder:text-slate-300 font-medium"
+                  style={{
+                    width: '100%', padding: '14px 16px', fontSize: '15px', fontWeight: 500,
+                    border: '1.5px solid #e2e8f0', borderRadius: '12px', outline: 'none',
+                    background: '#f8fafc', color: '#1e293b', transition: 'all 0.2s',
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = '#7c3aed'; e.target.style.background = '#fff'; e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.1)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; e.target.style.boxShadow = 'none'; }}
                 />
               </div>
+
               <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>
                   Password
                 </label>
                 <input
@@ -88,38 +99,41 @@ export default function AuthPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-3 focus:ring-violet-100 transition-all bg-slate-50 focus:bg-white placeholder:text-slate-300 font-medium"
+                  style={{
+                    width: '100%', padding: '14px 16px', fontSize: '15px', fontWeight: 500,
+                    border: '1.5px solid #e2e8f0', borderRadius: '12px', outline: 'none',
+                    background: '#f8fafc', color: '#1e293b', transition: 'all 0.2s',
+                  }}
+                  onFocus={(e) => { e.target.style.borderColor = '#7c3aed'; e.target.style.background = '#fff'; e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.1)'; }}
+                  onBlur={(e) => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; e.target.style.boxShadow = 'none'; }}
                 />
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
-                  <span className="text-red-400 text-sm">⚠</span>
-                  <p className="text-red-600 text-sm font-medium">{error}</p>
+                <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '10px', padding: '12px 16px', color: '#dc2626', fontSize: '14px', fontWeight: 500 }}>
+                  ⚠ {error}
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60 mt-1"
-                style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)', boxShadow: '0 4px 14px rgba(109,40,217,0.4)' }}
+                style={{
+                  width: '100%', padding: '16px', fontSize: '16px', fontWeight: 700,
+                  color: '#fff', borderRadius: '12px', border: 'none',
+                  background: 'linear-gradient(135deg, #6d28d9, #7c3aed)',
+                  boxShadow: '0 4px 15px rgba(109,40,217,0.4)',
+                  opacity: loading ? 0.7 : 1, transition: 'all 0.2s',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                }}
               >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                    </svg>
-                    Please wait...
-                  </span>
-                ) : isLogin ? 'Sign In →' : 'Create Account →'}
+                {loading ? 'Please wait...' : isLogin ? 'Sign In →' : 'Create Account →'}
               </button>
             </form>
           </div>
         </div>
 
-        <p className="text-center text-white/40 text-xs mt-5">
+        <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '13px', marginTop: '20px' }}>
           Powered by OpenAI · Groq · Gemini
         </p>
       </div>
