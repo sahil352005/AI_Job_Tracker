@@ -42,14 +42,14 @@ export default function AuthPage() {
         </div>
 
         {/* Enhanced card with backdrop blur */}
-        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/20">
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20">
           {/* Tab switcher with animation */}
           <div className="flex border-b border-slate-100/50 bg-slate-50/50">
             {(['Sign In', 'Register'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => { setIsLogin(tab === 'Sign In'); setError(''); }}
-                className={`flex-1 py-4 text-sm font-semibold transition-all duration-300 relative ${
+                className={`flex-1 py-5 px-4 text-sm font-semibold transition-all duration-300 relative ${
                   (isLogin ? 'Sign In' : 'Register') === tab
                     ? 'text-violet-600'
                     : 'text-slate-500 hover:text-slate-700'
@@ -63,11 +63,11 @@ export default function AuthPage() {
             ))}
           </div>
 
-          <div className="p-7">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="p-8 sm:p-10">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-widest mb-2">
-                  Email address
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                  Email Address
                 </label>
                 <input
                   type="email"
@@ -75,11 +75,12 @@ export default function AuthPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all bg-slate-50/50 focus:bg-white placeholder:text-slate-400 font-medium"
+                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all bg-slate-50/50 focus:bg-white placeholder:text-slate-400 font-medium"
                 />
               </div>
+
               <div>
-                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-widest mb-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
                   Password
                 </label>
                 <input
@@ -88,21 +89,21 @@ export default function AuthPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all bg-slate-50/50 focus:bg-white placeholder:text-slate-400 font-medium"
+                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-200 transition-all bg-slate-50/50 focus:bg-white placeholder:text-slate-400 font-medium"
                 />
               </div>
 
               {error && (
-                <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <span className="text-red-500 text-lg leading-none mt-0.5">⚠️</span>
-                  <p className="text-red-700 text-sm font-medium">{error}</p>
+                <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-lg px-4 py-3.5 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <span className="text-red-500 text-lg leading-none mt-0.5 shrink-0">⚠</span>
+                  <p className="text-red-700 text-sm font-medium leading-relaxed">{error}</p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 rounded-xl text-sm font-bold text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-2 hover:shadow-lg active:scale-95"
+                className="w-full py-3.5 rounded-lg text-sm font-bold text-white transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed mt-1 hover:shadow-lg hover:-translate-y-0.5 active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #6d28d9, #7c3aed)', boxShadow: '0 4px 15px rgba(109,40,217,0.35)' }}
               >
                 {loading ? (
@@ -111,7 +112,7 @@ export default function AuthPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
-                    Authenticating...
+                    Signing in...
                   </span>
                 ) : isLogin ? 'Sign In' : 'Create Account'}
               </button>
