@@ -6,16 +6,17 @@ interface Props {
   onClick: () => void;
 }
 
-const STATUS_COLOR: Record<AppStatus, string> = {
-  Applied: '#3b82f6',
-  'Phone Screen': '#f59e0b',
-  Interview: '#f97316',
-  Offer: '#10b981',
-  Rejected: '#ef4444',
+const STATUS_CONFIG: Record<AppStatus, { color: string; bg: string; label: string }> = {
+  Applied:        { color: '#2563eb', bg: '#eff6ff', label: 'Applied' },
+  'Phone Screen': { color: '#d97706', bg: '#fffbeb', label: 'Phone Screen' },
+  Interview:      { color: '#ea580c', bg: '#fff7ed', label: 'Interview' },
+  Offer:          { color: '#16a34a', bg: '#f0fdf4', label: 'Offer' },
+  Rejected:       { color: '#dc2626', bg: '#fef2f2', label: 'Rejected' },
 };
 
 export default function ApplicationCard({ app, onClick }: Props) {
   const [hovered, setHovered] = useState(false);
+  const st = STATUS_CONFIG[app.status];
 
   return (
     <div
@@ -24,60 +25,67 @@ export default function ApplicationCard({ app, onClick }: Props) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: '#fff',
-        borderRadius: '14px',
-        padding: '20px',
-        cursor: 'pointer',
-        border: hovered ? '1.5px solid #c4b5fd' : '1.5px solid #f1f5f9',
-        boxShadow: hovered ? '0 8px 24px rgba(124,58,237,0.12)' : '0 1px 4px rgba(0,0,0,0.06)',
+        borderRadius: '12px',
+        border: `1.5px solid ${hovered ? '#a78bfa' : '#e8edf2'}`,
+        boxShadow: hovered ? '0 8px 24px rgba(109,40,217,0.1)' : '0 1px 3px rgba(0,0,0,0.05)',
         transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
-        transition: 'all 0.2s ease',
+        transition: 'all 0.18s ease',
+        cursor: 'pointer',
+        overflow: 'hidden',
       }}
     >
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '6px' }}>
-        <p style={{ fontSize: '16px', fontWeight: 700, color: hovered ? '#7c3aed' : '#1e293b', lineHeight: 1.3, transition: 'color 0.2s' }}>
-          {app.company}
-        </p>
-        <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: STATUS_COLOR[app.status], flexShrink: 0, marginTop: '4px' }} />
-      </div>
+      {/* Top color bar */}
+      <div style={{ height: '3px', background: `linear-gradient(90deg, ${st.color}, ${st.color}88)` }} />
 
-      {/* Role */}
-      <p style={{ fontSize: '14px', fontWeight: 500, color: '#64748b', marginBottom: '14px' }}>{app.role}</p>
-
-      {/* Meta */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px' }}>
-        {app.location && (
-          <span style={{ fontSize: '13px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            📍 {app.location}{app.seniority ? ` · ${app.seniority}` : ''}
+      <div style={{ padding: '16px' }}>
+        {/* Company + status badge */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '4px' }}>
+          <p style={{ fontSize: '15px', fontWeight: 700, color: hovered ? '#7c3aed' : '#0f172a', lineHeight: 1.3, transition: 'color 0.18s', flex: 1 }}>
+            {app.company}
+          </p>
+          <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '6px', background: st.bg, color: st.color, whiteSpace: 'nowrap', flexShrink: 0 }}>
+            {st.label}
           </span>
-        )}
-        {app.salaryRange && (
-          <span style={{ fontSize: '13px', color: '#10b981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-            💰 {app.salaryRange}
-          </span>
-        )}
-      </div>
+        </div>
 
-      {/* Skills */}
-      {app.skills && app.skills.length > 0 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
-          {app.skills.slice(0, 3).map((s) => (
-            <span key={s} style={{
-              background: '#f5f3ff', color: '#7c3aed', fontSize: '12px', fontWeight: 600,
-              padding: '4px 10px', borderRadius: '99px', border: '1px solid #ede9fe',
-            }}>{s}</span>
-          ))}
-          {app.skills.length > 3 && (
-            <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600, padding: '4px 6px' }}>+{app.skills.length - 3}</span>
+        {/* Role */}
+        <p style={{ fontSize: '13px', fontWeight: 500, color: '#475569', marginBottom: '12px', lineHeight: 1.4 }}>{app.role}</p>
+
+        {/* Meta row */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginBottom: '12px' }}>
+          {app.location && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ fontSize: '12px' }}>📍</span>
+              <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>{app.location}{app.seniority ? ` · ${app.seniority}` : ''}</span>
+            </div>
+          )}
+          {app.salaryRange && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ fontSize: '12px' }}>💰</span>
+              <span style={{ fontSize: '12px', color: '#16a34a', fontWeight: 600 }}>{app.salaryRange}</span>
+            </div>
           )}
         </div>
-      )}
 
-      {/* Footer */}
-      <div style={{ borderTop: '1px solid #f8fafc', paddingTop: '12px' }}>
-        <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 500 }}>
-          Applied {new Date(app.dateApplied).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-        </span>
+        {/* Skills */}
+        {app.skills && app.skills.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '12px' }}>
+            {app.skills.slice(0, 3).map((s) => (
+              <span key={s} style={{ fontSize: '11px', fontWeight: 600, padding: '3px 8px', borderRadius: '4px', background: '#f5f3ff', color: '#6d28d9', border: '1px solid #ede9fe' }}>{s}</span>
+            ))}
+            {app.skills.length > 3 && (
+              <span style={{ fontSize: '11px', fontWeight: 600, color: '#94a3b8', padding: '3px 4px' }}>+{app.skills.length - 3} more</span>
+            )}
+          </div>
+        )}
+
+        {/* Footer */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #f1f5f9' }}>
+          <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>
+            {new Date(app.dateApplied).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </span>
+          <span style={{ fontSize: '11px', color: '#a78bfa', fontWeight: 600 }}>View details →</span>
+        </div>
       </div>
     </div>
   );
