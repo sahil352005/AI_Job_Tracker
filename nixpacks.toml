@@ -1,8 +1,0 @@
-[providers]
-node = {}
-
-[build]
-cmds = ["cd server && yarn install && yarn build"]
-
-[start]
-cmd = "cd server && yarn start"
