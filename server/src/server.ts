@@ -13,14 +13,17 @@ const app = express();
 // ✅ Allowed origins (dev + prod)
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.CLIENT_URL
+  process.env.CLIENT_URL?.replace(/\/$/, "") // Remove trailing slash
 ];
 
 // ✅ CORS setup
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Normalize origin by removing trailing slash
+      const normalizedOrigin = origin?.replace(/\/$/, "");
+      
+      if (!origin || allowedOrigins.includes(normalizedOrigin)) {
         callback(null, true);
       } else {
         callback(new Error("CORS not allowed"));
